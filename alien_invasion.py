@@ -1,7 +1,8 @@
 import sys
 import pygame
 from settngs import Settings
-
+from ship import Ship
+from character import Character
 
 class AlienInvasion:
     def __init__(self):
@@ -10,23 +11,47 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width,
-                                              self.settings.screen_height))
+                                               self.settings.screen_height))
 
         pygame.display.set_caption("Alien Invasion")
-        self.bg_color = (230, 230, 230)
+
+        self.ship = Ship(self)
+        self.character = Character(self)
 
     def run_game(self):
         """开始游戏的主循环"""
         while True:
             # 侦听键盘和⿏标事件
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self.ship.update()
             # 每次循环时都重绘屏幕
-            self.screen.fill(self.settings.bg_color)
-            # 让最近绘制的屏幕可⻅
-            pygame.display.flip()
+            self._update_screen()
             self.clock.tick(60)
+
+    def _check_events(self):
+        """响应按键和⿏标事件"""
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = True
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = True
+
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = False
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = False
+
+    def _update_screen(self):
+        """更新屏幕上的图像，并切换到新屏幕"""
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+        self.character.blitme()
+        pygame.display.flip()
+
 
 
 if __name__ == '__main__':
