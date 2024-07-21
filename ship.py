@@ -11,6 +11,8 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
         # 加载⻜船图像并获取其外接矩形
         self.image = pygame.image.load('images/ship.bmp')
+        self.image_left = pygame.image.load('images/shipleft.bmp')
+        self.image_right = pygame.image.load('images/shipright.bmp')
         self.rect = self.image.get_rect()
         # 每艘新⻜船都放在屏幕底部的中央
         self.rect.midbottom = self.screen_rect.midbottom
@@ -37,3 +39,6 @@ class Ship:
     def blitme(self):
         """在指定位置绘制⻜船"""
         self.screen.blit(self.image, self.rect)
+
+
+
